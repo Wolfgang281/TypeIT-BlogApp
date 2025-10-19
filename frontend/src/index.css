@@ -1,0 +1,18 @@
+/* ? this should be the first import */
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+
+@import "tailwindcss";
+
+* {
+  font-family: "Outfit", sans-serif;
+}
+
+/*! Hide scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/*! primary color */
+@theme {
+  --color-primary: #5044e5;
+}
