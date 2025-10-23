@@ -64,6 +64,9 @@ export const deleteBlog = expressAsyncHandler(async (req, res, next) => {
 
   if (!blog) return next(new CustomError("No blog found", 404));
 
+  //? delete image from imagekit:TODO and delete all comments
+  await commentModel.deleteMany({ blogId: blog._id });
+
   res.status(200).json({
     success: true,
     message: "Blog deleted successfully",

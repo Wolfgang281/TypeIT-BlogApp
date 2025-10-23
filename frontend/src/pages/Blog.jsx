@@ -36,7 +36,7 @@ const Blog = () => {
     <div className="relative">
       <img
         src={assets.gradientBackground}
-        alt=""
+        alt="gradientBackground"
         className="absolute -top-50 -z-1 opacity-50"
       />
       <Navbar />
