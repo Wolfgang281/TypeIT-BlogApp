@@ -1,17 +1,20 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import express from "express";
-import cors from "cors";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import express from "express";
 
-import { errorMiddleware } from "./src/middlewares/error.middleware.js";
 import { connectDB } from "./src/config/database.js";
+import { errorMiddleware } from "./src/middlewares/error.middleware.js";
 
 import { seedAdmin } from "./src/seed/admin.seed.js";
-import authRoutes from "./src/routes/auth.route.js";
-import blogRoutes from "./src/routes/blog.routes.js";
-import { authenticate, authorize } from "./src/middlewares/auth.middleware.js";
+
+import authAdminRoutes from "./src/routes/admin/auth.route.js";
+import blogAdminRoutes from "./src/routes/admin/blog.routes.js";
+import commentAdminRoutes from "./src/routes/admin/comment.route.js";
+import blogUserRoutes from "./src/routes/user/blog.routes.js";
+import commentUserRoutes from "./src/routes/user/comment.routes.js";
 
 connectDB();
 
@@ -21,13 +24,16 @@ if (process.argv[2] === "seed") {
 
 const app = express();
 
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
-app.use("/api/admin", authRoutes);
-app.use("/api/blogs", blogRoutes);
+app.use("/api/admin/auth", authAdminRoutes);
+app.use("/api/admin/blog", blogAdminRoutes);
+app.use("/api/user/blog", blogUserRoutes);
+app.use("/api/admin/comment", commentAdminRoutes);
+app.use("/api/user/comment", commentUserRoutes);
 
 app.use(errorMiddleware);
 

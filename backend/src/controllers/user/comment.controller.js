@@ -1,11 +1,13 @@
 import expressAsyncHandler from "express-async-handler";
-import commentModel from "../models/comment.model";
+import commentModel from "../../models/comment.model.js";
+import CustomError from "../../utils/Error.util.js";
 
 export const addComment = expressAsyncHandler(async (req, res, next) => {
-  const { blogId, name, content } = req.body;
+  const { name, content } = req.body;
+  const { id } = req.params; // blogId from params
 
   const comment = await commentModel.create({
-    blogId,
+    blogId: id,
     name,
     content,
   });

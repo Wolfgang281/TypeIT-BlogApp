@@ -13,7 +13,7 @@ export const AppProvider = ({ children }) => {
 
   const [token, setToken] = useState(false);
   const [blogs, setBlogs] = useState([]);
-  const [input, setInput] = useState([]);
+  const [input, setInput] = useState("");
 
   const fetchBlogs = async () => {
     try {
@@ -31,6 +31,7 @@ export const AppProvider = ({ children }) => {
         setToken(true);
       }
     } catch (error) {
+      console.log(error);
       setToken(false);
     }
   };
@@ -38,11 +39,6 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     fetchBlogs();
     verifyUser();
-    // const token = localStorage.getItem("token");
-    // if (token) {
-    // setToken(token);
-    // axios.defaults.headers.common["Authorization"] = `${token}`;
-    // }
   }, []);
 
   const value = {
@@ -58,6 +54,7 @@ export const AppProvider = ({ children }) => {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAppContext = () => {
   return useContext(AppContext);
 };

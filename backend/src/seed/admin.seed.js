@@ -1,13 +1,13 @@
 import expressAsyncHandler from "express-async-handler";
-import userModel from "../models/user.model";
+import adminModel from "../models/admin.model.js";
 
 export const seedAdmin = expressAsyncHandler(async (req, res, next) => {
   const email = process.env.ADMIN_EMAIL;
   const password = process.env.ADMIN_PASSWORD;
 
-  const existingUser = await userModel.findOne({ email });
+  const existingUser = await adminModel.findOne({ email });
   if (!existingUser) {
-    const user = await userModel.create({
+    const user = await adminModel.create({
       email,
       password,
       isAdmin: true,

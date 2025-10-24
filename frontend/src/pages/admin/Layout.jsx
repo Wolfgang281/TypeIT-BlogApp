@@ -1,10 +1,17 @@
 import { assets } from "../../assets/assets";
 import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/admin/Sidebar";
+import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const Layout = () => {
+  const { setToken, axios } = useAppContext();
   const navigate = useNavigate();
-  const logout = () => {
+  const logout = async () => {
+    const { data } = await axios.post("/api/admin/logout");
+    console.log(data);
+    setToken(false);
+    toast.success(data.message);
     navigate("/");
   };
   return (

@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { assets, blog_data, comments_data } from "../assets/assets";
+import { assets } from "../assets/assets";
 import Navbar from "../components/Navbar";
 import Moment from "moment";
 import Footer from "../components/Footer";
 import Loader from "../components/Loader";
+import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const Blog = () => {
+  const { axios } = useAppContext();
+
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [comments, setComments] = useState([]);
@@ -14,17 +18,48 @@ const Blog = () => {
   const [content, setContent] = useState("");
 
   const fetchData = async () => {
-    const blog = blog_data.find((item) => item._id === id);
-    setData(blog);
+    try {
+      const { data } = await axios.get(`/api/blogs/${id}`);
+      data.success
+        ? setData(data.blog)
+        : toast.error(data.response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
 
   const fetchComments = async () => {
-    setComments(comments_data);
+    try {
+      const { data } = await axios.get(`/api/comments/${id}`);
+      data.success
+        ? setComments(data.comments)
+        : toast.error(data.response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
 
   const addComment = async (e) => {
     e.preventDefault();
-    console.log(name, content);
+    try {
+      const { data } = await axios.post(
+        `/api/comments/add/${id}`,
+        { name, content },
+        {
+          withCredentials: true,
+        }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        fetchComments();
+        setName("");
+        setContent("");
+      } else {
+        toast.error(data.response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
 
   useEffect(() => {

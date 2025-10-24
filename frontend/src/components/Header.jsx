@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useRef } from "react";
 import { assets } from "../assets/assets";
+import { useAppContext } from "../context/AppContext";
 
 const Header = () => {
+  const { input, setInput } = useAppContext();
+  const inputRef = useRef();
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setInput(inputRef.current.value);
+  };
+
+  const onClear = () => {
+    setInput("");
+    inputRef.current.value = "";
+  };
+
   return (
     <div className="mx-8 sm:mx-16 xl:mx-24 relative">
       <div className="text-center mt-20 mb-8">
@@ -21,10 +35,12 @@ const Header = () => {
         </p>
 
         <form
+          onSubmit={handleFormSubmit}
           action=""
           className="flex justify-between max-w-lg max-sm:scale-75 mx-auto border border-gray-300 bg-white rounded overflow-hidden"
         >
           <input
+            ref={inputRef}
             type="text"
             name=""
             id=""
@@ -39,6 +55,16 @@ const Header = () => {
             Search
           </button>
         </form>
+      </div>
+      <div className="text-center">
+        {input && (
+          <button
+            onClick={onClear}
+            className="bg-primary text-white px-3 py-1 text-xs m-1 rounded hover:scale-105 transition-all cursor-pointer"
+          >
+            Clear Search
+          </button>
+        )}
       </div>
       <img
         src={assets.gradientBackground}
