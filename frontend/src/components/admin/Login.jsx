@@ -60,6 +60,7 @@ const Login = () => {
                 name=""
                 placeholder="Enter your EmailId"
                 className="border-b-2 border-gray-200 p-2 outline-none mb-6"
+                autoComplete="email" // enables browser email suggestions
               />
             </div>
             <div className="flex flex-col">

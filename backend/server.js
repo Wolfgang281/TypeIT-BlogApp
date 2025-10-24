@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/admin", authRoutes);
-app.use("/api/blogs", authenticate, authorize, blogRoutes);
+app.use("/api/blogs", blogRoutes);
 
 app.use(errorMiddleware);
 
