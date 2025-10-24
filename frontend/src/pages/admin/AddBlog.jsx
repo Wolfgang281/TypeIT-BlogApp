@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from "react";
-import { assets, blogCategories } from "../../assets/assets";
 import Quill from "quill";
-import { useAppContext } from "../../context/AppContext";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { assets, blogCategories } from "../../assets/assets";
+import { useAppContext } from "../../context/AppContext";
 
 const AddBlog = () => {
   const { axios, setBlogs } = useAppContext();
@@ -38,7 +38,7 @@ const AddBlog = () => {
       formData.append("blog", JSON.stringify(blog));
       formData.append("image", image);
 
-      const { data } = await axios.post("/api/blogs/add", formData, {
+      const { data } = await axios.post("/api/admin/blog/add", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

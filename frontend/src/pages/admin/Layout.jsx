@@ -1,14 +1,14 @@
-import { assets } from "../../assets/assets";
+import toast from "react-hot-toast";
 import { Outlet, useNavigate } from "react-router-dom";
+import { assets } from "../../assets/assets";
 import Sidebar from "../../components/admin/Sidebar";
 import { useAppContext } from "../../context/AppContext";
-import toast from "react-hot-toast";
 
 const Layout = () => {
   const { setToken, axios } = useAppContext();
   const navigate = useNavigate();
   const logout = async () => {
-    const { data } = await axios.post("/api/admin/logout");
+    const { data } = await axios.post("/api/admin/auth/logout");
     console.log(data);
     setToken(false);
     toast.success(data.message);

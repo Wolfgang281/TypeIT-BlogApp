@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
+import { useAppContext } from "../../context/AppContext";
 
 const Login = () => {
   const { axios, setToken } = useAppContext();
@@ -10,7 +10,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "/api/admin/login",
+        "/api/admin/auth/login",
         { email, password },
         {
           withCredentials: true,
@@ -18,11 +18,6 @@ const Login = () => {
       );
       if (response.data.success) {
         toast.success(response.data.message);
-        // localStorage.setItem("token", response.data.token);
-        // axios.defaults.headers.common[
-        //   "Authorization"
-        // ] = `${response.data.token}`;
-        // setToken(response.data.token);
         setToken(true);
       } else {
         toast.error(response.data.message);

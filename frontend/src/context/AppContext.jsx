@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
@@ -17,7 +17,7 @@ export const AppProvider = ({ children }) => {
 
   const fetchBlogs = async () => {
     try {
-      const { data } = await axios.get("/api/blogs/all");
+      const { data } = await axios.get("/api/user/blog/all");
       data.success ? setBlogs(data.blogs) : toast.error(data.message);
     } catch (error) {
       toast.error(error.response.data.message);
@@ -26,12 +26,11 @@ export const AppProvider = ({ children }) => {
 
   const verifyUser = async () => {
     try {
-      const { data } = await axios.get("/api/admin/verify");
+      const { data } = await axios.get("/api/admin/auth/verify");
       if (data.success) {
         setToken(true);
       }
     } catch (error) {
-      console.log(error);
       setToken(false);
     }
   };

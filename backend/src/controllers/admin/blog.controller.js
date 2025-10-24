@@ -5,7 +5,7 @@ import CustomError from "../../utils/Error.util.js";
 import { uploadImage } from "../../utils/imageKit.util.js";
 
 export const addBlog = expressAsyncHandler(async (req, res, next) => {
-  // const blogData = JSON.parse(req.body.blog);
+  const blogData = JSON.parse(req.body.blog);
   const imageFile = req.file;
 
   const b64 = `data:${imageFile.mimetype};base64,${imageFile.buffer.toString(
@@ -15,15 +15,15 @@ export const addBlog = expressAsyncHandler(async (req, res, next) => {
   const image = await uploadImage(b64);
 
   const blog = await blogModel.create(
-    /* {
-    title: blogData.title,
-    subTitle: blogData.subTitle,
-    description: blogData.description,
-    category: blogData.category,
-    isPublished: blogData.isPublished,
-    image,
-  } */
-    { ...req.body, image }
+    {
+      title: blogData.title,
+      subTitle: blogData.subTitle,
+      description: blogData.description,
+      category: blogData.category,
+      isPublished: blogData.isPublished,
+      image,
+    }
+    // { ...req.body, image }
   );
 
   res.status(201).json({

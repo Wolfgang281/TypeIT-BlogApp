@@ -6,7 +6,7 @@ export const getAllComments = expressAsyncHandler(async (req, res, next) => {
   const comments = await commentModel
     .find()
     .sort({ createdAt: -1 })
-    .populate({ blogId });
+    .populate({ path: "blogId" });
 
   if (comments.length === 0)
     return next(new CustomError("No comments found", 404));

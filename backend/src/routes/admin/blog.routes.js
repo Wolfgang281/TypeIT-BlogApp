@@ -21,8 +21,4 @@ router.get("/:id", authenticate, authorize, getBlog);
 router.patch("/update/:id", authenticate, authorize, updateBlog);
 router.delete("/:id", authenticate, authorize, deleteBlog);
 
-router.get("/verify", authenticate, (req, res) => {
-  res.status(200).json({ success: true, message: "User is authenticated" });
-});
-
 export default router;
