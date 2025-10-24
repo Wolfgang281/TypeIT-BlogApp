@@ -1,10 +1,35 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const { axios, setToken } = useAppContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const response = await axios.post(
+        "/api/admin/login",
+        { email, password },
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
+        // localStorage.setItem("token", response.data.token);
+        // axios.defaults.headers.common[
+        //   "Authorization"
+        // ] = `${response.data.token}`;
+        // setToken(response.data.token);
+        setToken(true);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
 
   return (
