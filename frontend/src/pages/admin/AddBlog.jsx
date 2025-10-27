@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { parse } from "marked";
 import Quill from "quill";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -9,6 +10,7 @@ import { useAppContext } from "../../context/AppContext";
 const AddBlog = () => {
   const { axios, setBlogs } = useAppContext();
   const [isAdding, setIsAdding] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const editorRef = useRef(null);
   const quillRef = useRef(null);
@@ -20,6 +22,25 @@ const AddBlog = () => {
   const [isPublished, setIsPublished] = useState(false);
 
   const navigate = useNavigate();
+
+  const generateContent = async () => {
+    if (!title) return toast.error("Title is required!");
+    try {
+      setLoading(true);
+      const { data } = await axios.post("/api/admin/blog/generate", {
+        prompt: title,
+      });
+      if (data.success) {
+        quillRef.current.root.innerHTML = parse(data.content);
+        setLoading(false);
+      } else {
+        toast.error(data.message);
+        setLoading(false);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
 
   const handleFormSubmit = async (e) => {
     try {
@@ -117,6 +138,21 @@ const AddBlog = () => {
         <p className="mt-4">Blog Description</p>
         <div className="max-w-lg h-74 pb-16 sm:pb-10 relative">
           <div ref={editorRef}></div>
+          {loading && (
+            <div className="absolute right-0 top-0 bottom-0 left-0 flex items-center justify-center bg-black/2 mt-2">
+              <div className="w-8 h-8 rounded-full border-2 border-t-white animate-spin">
+                Loading...
+              </div>
+            </div>
+          )}
+          <button
+            type="button"
+            disabled={loading}
+            onClick={generateContent}
+            className="absolute bottom-1 right-2 ml-2 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline cursor-pointer"
+          >
+            Generate with AI
+          </button>
         </div>
 
         <p className="mt-4">Blog Category</p>

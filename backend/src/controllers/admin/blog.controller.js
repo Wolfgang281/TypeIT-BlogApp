@@ -1,4 +1,5 @@
 import expressAsyncHandler from "express-async-handler";
+import main from "../../config/gemini.config.js";
 import blogModel from "../../models/blog.model.js";
 import commentModel from "../../models/comment.model.js";
 import CustomError from "../../utils/Error.util.js";
@@ -117,5 +118,26 @@ export const getBlog = expressAsyncHandler(async (req, res, next) => {
     success: true,
     message: "Blog fetched successfully",
     blog,
+  });
+});
+
+export const generateContent = expressAsyncHandler(async (req, res, next) => {
+  const prompt = req.body.prompt;
+  let response = await main(
+    prompt +
+      ` Generate a blog content for this topic in simple plain rich text format`
+  );
+
+  response = response
+    .replace(
+      /^.*?(?=TypeScript|JavaScript|React|Next|Node|Mongo|HTML|CSS|Blog|Introduction|In this)/i,
+      ""
+    )
+    .trim();
+
+  res.status(200).json({
+    success: true,
+    message: "Content generated successfully",
+    content: response,
   });
 });

@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   addBlog,
   deleteBlog,
+  generateContent,
   getBlog,
   getBlogs,
   getDashboard,
@@ -17,6 +18,9 @@ router.post("/add", authenticate, authorize, upload.single("image"), addBlog);
 router.get("/all", authenticate, authorize, getBlogs);
 router.patch("/update-publish/:id", authenticate, authorize, togglePublish);
 router.get("/dashboard", authenticate, authorize, getDashboard);
+
+router.post("/generate", authenticate, authorize, generateContent);
+
 router.get("/:id", authenticate, authorize, getBlog);
 router.patch("/update/:id", authenticate, authorize, updateBlog);
 router.delete("/:id", authenticate, authorize, deleteBlog);

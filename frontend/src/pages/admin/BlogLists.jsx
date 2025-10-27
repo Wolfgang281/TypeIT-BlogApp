@@ -13,6 +13,7 @@ const BlogLists = () => {
       const { data } = await axios.get("/api/admin/blog/all");
       if (data.success) {
         setBlogs(data.blogs);
+        return data.blogs;
       } else {
         toast.error(data.message);
       }

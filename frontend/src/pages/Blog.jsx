@@ -1,12 +1,12 @@
+import Moment from "moment";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { assets } from "../assets/assets";
-import Navbar from "../components/Navbar";
-import Moment from "moment";
 import Footer from "../components/Footer";
 import Loader from "../components/Loader";
+import Navbar from "../components/Navbar";
 import { useAppContext } from "../context/AppContext";
-import toast from "react-hot-toast";
 
 const Blog = () => {
   const { axios } = useAppContext();
@@ -19,7 +19,8 @@ const Blog = () => {
 
   const fetchData = async () => {
     try {
-      const { data } = await axios.get(`/api/blogs/${id}`);
+      const { data } = await axios.get(`/api/user/blog/${id}`);
+      console.log(data);
       data.success
         ? setData(data.blog)
         : toast.error(data.response.data.message);
@@ -30,7 +31,7 @@ const Blog = () => {
 
   const fetchComments = async () => {
     try {
-      const { data } = await axios.get(`/api/comments/${id}`);
+      const { data } = await axios.get(`/api/user/comment/${id}`);
       data.success
         ? setComments(data.comments)
         : toast.error(data.response.data.message);
@@ -43,7 +44,7 @@ const Blog = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        `/api/comments/add/${id}`,
+        `/api/user/comment/add/${id}`,
         { name, content },
         {
           withCredentials: true,

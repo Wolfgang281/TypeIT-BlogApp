@@ -1,23 +1,35 @@
-import React from "react";
+import toast from "react-hot-toast";
 import { assets } from "../../assets/assets";
 import { useAppContext } from "../../context/AppContext";
-import toast from "react-hot-toast";
 
 const TableItem = ({ blog, fetchBlogs, index }) => {
-  console.log(blog);
   const { title, createdAt } = blog;
 
-  const { axios } = useAppContext();
+  const { axios, setBlogs } = useAppContext();
 
   const deleteBlog = async (id) => {
     try {
       const confirm = window.confirm("Are you sure you want to delete?");
       if (!confirm) return;
-      await axios.delete(`/api/blogs/${id}`);
-      await fetchBlogs();
+      await axios.delete(`/api/admin/blog/${id}`);
+      const blogs = await fetchBlogs();
+      console.log(blogs);
+      setBlogs(blogs);
       toast.success("Blog deleted successfully");
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+
+  const handleDraft = async (id) => {
+    try {
+      await axios.patch(`/api/admin/blog/update-publish/${id}`);
+      await fetchBlogs();
+      const blogs = await fetchBlogs();
+      console.log(blogs);
+      setBlogs(blogs);
+      toast.success("Blog updated successfully");
+    } catch (error) {
       toast.error(error.response.data.message);
     }
   };
@@ -38,7 +50,12 @@ const TableItem = ({ blog, fetchBlogs, index }) => {
         </p>
       </td>
       <td className="px-2 py-4 flex text-xs gap-3">
-        <button className="border px-2 py-0.5 mt-1 rounded cursor-pointer">
+        <button
+          onClick={() => {
+            handleDraft(blog._id);
+          }}
+          className="border px-2 py-0.5 mt-1 rounded cursor-pointer"
+        >
           {blog.isPublished ? "Draft" : "Publish"}
         </button>
         <button
