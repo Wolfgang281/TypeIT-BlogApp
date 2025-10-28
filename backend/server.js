@@ -30,10 +30,7 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: [
-      "http://localhost:5173",
-      "https://typeit-blogapp-frontend.onrender.com",
-    ],
+    origin: "https://typeit-blogapp-frontend.onrender.com",
   })
 );
 
